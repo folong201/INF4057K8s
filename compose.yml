@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  # client:
+  #   build: ./client
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - query
+  #     - moderation
+  #     - event-bus
+  #   restart: always
+
+  comments:
+    image: comments
+    build: ./comments
+    ports:
+      - "4001:4001"
+    depends_on:
+      - event-bus
+    restart: always
+
+  event-bus:
+    image: event-bus
+    build: ./event-bus
+    ports:
+      - "4005:4005"
+    restart: always
+
+  moderation:
+    image: moderation
+    build: ./moderation
+    ports:
+      - "4003:4003"
+    restart: always
+
+  posts:
+    image: posts
+    build: ./posts
+    ports:
+      - "4000:4000"
+    depends_on:
+      - event-bus
+    restart: always
+
+  query:
+    image: query
+    build: ./query
+    ports:
+      - "4002:4002"
+    depends_on:
+      - posts
+      - comments
+    restart: always
